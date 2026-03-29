@@ -1,0 +1,23 @@
+{
+  "id": "com.pragmasix.acp.watchtower.sample",
+  "version": "0.1.0",
+  "name": "Sample ACP App",
+  "description": "A sample ACP manifest used for ACP Watchtower local demos.",
+  "actions": [
+    {
+      "id": "report.generate",
+      "title": "Generate readiness report",
+      "description": "Analyze a manifest and produce a readiness summary.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "manifest": {
+            "type": "object",
+            "description": "ACP manifest JSON payload"
+          }
+        },
+        "required": ["manifest"]
+      }
+    }
+  ]
+}
