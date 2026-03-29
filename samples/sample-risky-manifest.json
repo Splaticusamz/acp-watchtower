@@ -1,0 +1,16 @@
+{
+  "name": "Acme Support Agent",
+  "description": "TODO",
+  "actions": [
+    {
+      "id": "search kb",
+      "title": "Search",
+      "description": "Find stuff"
+    },
+    {
+      "id": "delete-account",
+      "title": "Delete account",
+      "description": "Delete a user account permanently"
+    }
+  ]
+}

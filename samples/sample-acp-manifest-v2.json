@@ -1,0 +1,55 @@
+{
+  "name": "Acme Support Agent",
+  "version": "1.0.0",
+  "description": "Agent-facing support toolkit for triage, escalation, and renewal interventions.",
+  "metadata": {
+    "owner": "support-platform",
+    "contact": "agents@acme.dev",
+    "docsUrl": "https://example.com/docs/support-agent"
+  },
+  "actions": [
+    {
+      "id": "search-kb",
+      "title": "Search knowledge base",
+      "description": "Search the support knowledge base with semantic matching and return concise snippets.",
+      "input": {
+        "properties": {
+          "query": { "type": "string", "description": "Customer problem or keywords" },
+          "limit": { "type": "number", "description": "Number of results to return" },
+          "locale": { "type": "string", "description": "Optional customer locale" }
+        },
+        "required": ["query"]
+      },
+      "examples": [{ "query": "refund policy for annual plan", "locale": "en-US" }]
+    },
+    {
+      "id": "create-escalation",
+      "title": "Create escalation ticket",
+      "description": "Create an escalation ticket for incidents that need a human support lead, including severity and customer impact.",
+      "input": {
+        "properties": {
+          "accountId": { "type": "string", "description": "Customer account id" },
+          "reason": { "type": "string", "description": "Why this escalation is needed" },
+          "severity": { "type": "string", "description": "incident severity level" }
+        },
+        "required": ["accountId", "reason", "severity"]
+      },
+      "examples": [{ "accountId": "acct_123", "reason": "billing lockout", "severity": "high" }],
+      "safetyNotes": ["Escalations are logged and visible to the support lead queue."]
+    },
+    {
+      "id": "draft-renewal-offer",
+      "title": "Draft renewal offer",
+      "description": "Draft a renewal offer suggestion for at-risk accounts before routing to a human approver.",
+      "input": {
+        "properties": {
+          "accountId": { "type": "string", "description": "Customer account id" },
+          "riskReason": { "type": "string", "description": "Why the renewal looks at risk" }
+        },
+        "required": ["accountId", "riskReason"]
+      },
+      "examples": [{ "accountId": "acct_991", "riskReason": "downgrade signals" }],
+      "safetyNotes": ["Draft only. Human approval required before customer send."]
+    }
+  ]
+}
