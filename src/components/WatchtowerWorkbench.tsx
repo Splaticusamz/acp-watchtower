@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { AnalysisResult, DiffResult, StoredReport } from "@/lib/watchtower";
 
 type SampleKey = "baseline" | "improved" | "risky" | "ecommerce";
@@ -195,6 +195,17 @@ export default function WatchtowerWorkbench() {
   const [webhookPreview, setWebhookPreview] = useState<Record<string, unknown> | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [autoRan, setAutoRan] = useState(false);
+
+  // Auto-run analysis on first load so visitors see results immediately
+  useEffect(() => {
+    if (!autoRan) {
+      setAutoRan(true);
+      postJson<AnalysisResult>("/api/analyze", { manifest: samples.baseline.manifest })
+        .then(setAnalysis)
+        .catch(() => {});
+    }
+  }, [autoRan]);
 
   const severityCounts = useMemo(() => {
     const issues = analysis?.issues ?? [];
