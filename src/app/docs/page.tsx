@@ -100,6 +100,28 @@ curl -X POST https://acp-watchtower.vercel.app/api/reports \\
           </pre>
         </section>
 
+        <section className="mt-20">
+          <h2 className="text-2xl font-semibold text-white">More resources</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <Link href="/docs/ci" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
+              <h3 className="font-semibold text-white">CI/CD Integration Guide →</h3>
+              <p className="mt-2 text-sm text-slate-300">GitHub Actions, GitLab CI, and generic curl examples for automated manifest validation.</p>
+            </Link>
+            <Link href="/examples" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
+              <h3 className="font-semibold text-white">Example Manifests →</h3>
+              <p className="mt-2 text-sm text-slate-300">Real-world patterns for support, e-commerce, CRM, DevOps, and more.</p>
+            </Link>
+            <Link href="/compare" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
+              <h3 className="font-semibold text-white">Manual vs Automated →</h3>
+              <p className="mt-2 text-sm text-slate-300">See how automated validation compares to manual manifest reviews.</p>
+            </Link>
+            <Link href="/changelog" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
+              <h3 className="font-semibold text-white">Changelog →</h3>
+              <p className="mt-2 text-sm text-slate-300">What's new in ACP Watchtower — features, improvements, and fixes.</p>
+            </Link>
+          </div>
+        </section>
+
         <div className="mt-16 rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-8 text-center">
           <h2 className="text-2xl font-semibold text-white">Ready to validate?</h2>
           <p className="mt-2 text-slate-300">Paste a manifest and get your readiness score in seconds.</p>
