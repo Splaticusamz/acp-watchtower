@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import WaitlistForm from "@/components/WaitlistForm";
 
 export const metadata: Metadata = {
   title: "Pricing — ACP Watchtower",
@@ -100,15 +101,20 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <button
-                className={`mt-8 w-full rounded-lg px-4 py-3 text-sm font-semibold transition ${
-                  tier.highlight
-                    ? "bg-cyan-400 text-slate-950 hover:bg-cyan-300"
-                    : "border border-slate-700 text-slate-200 hover:border-slate-500 hover:text-white"
-                }`}
-              >
-                {tier.cta}
-              </button>
+              {tier.name === "Free" ? (
+                <Link href="/" className={`mt-8 block w-full rounded-lg border border-slate-700 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:border-slate-500 hover:text-white`}>
+                  {tier.cta}
+                </Link>
+              ) : tier.name === "Enterprise" ? (
+                <a href="mailto:pragmasixco@gmail.com?subject=ACP%20Watchtower%20Enterprise" className="mt-8 block w-full rounded-lg border border-slate-700 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:border-slate-500 hover:text-white">
+                  {tier.cta}
+                </a>
+              ) : (
+                <div className="mt-8">
+                  <p className="mb-2 text-xs text-slate-400">Join the Pro waitlist:</p>
+                  <WaitlistForm plan="pro" />
+                </div>
+              )}
             </div>
           ))}
         </div>

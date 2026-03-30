@@ -1,4 +1,5 @@
 import WatchtowerWorkbench from "@/components/WatchtowerWorkbench";
+import WaitlistForm from "@/components/WaitlistForm";
 
 const pillars = [
   {
@@ -102,6 +103,16 @@ export default function Home() {
               <li>4. Hosted report persistence and public report pages</li>
               <li>5. Webhook schema + Vercel Cron monitoring hooks</li>
             </ol>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-8">
+          <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div>
+              <h2 className="text-2xl font-semibold text-white">Get early access to Pro</h2>
+              <p className="mt-2 text-sm text-slate-300">Scheduled re-checks, webhook alerts, team dashboards, and CI/CD integration. Join the waitlist — we launch soon.</p>
+            </div>
+            <WaitlistForm plan="pro" />
           </div>
         </section>
 
