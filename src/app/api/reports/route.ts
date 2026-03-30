@@ -1,5 +1,37 @@
 import { NextResponse } from "next/server";
+import { readdir, readFile } from "node:fs/promises";
+import path from "node:path";
 import { analyzeManifest, buildWebhookPayload, diffManifests, saveReport } from "@/lib/watchtower";
+import type { StoredReport } from "@/lib/watchtower";
+
+const REPORT_DIR = path.join(process.cwd(), "data", "reports");
+
+export async function GET() {
+  try {
+    const files = await readdir(REPORT_DIR).catch(() => [] as string[]);
+    const reports: Array<{ id: string; slug: string; createdAt: string; manifestName: string; score: number; verdict: string; actionCount: number }> = [];
+    for (const file of files) {
+      if (!file.endsWith(".json")) continue;
+      try {
+        const raw = await readFile(path.join(REPORT_DIR, file), "utf8");
+        const r = JSON.parse(raw) as StoredReport;
+        reports.push({
+          id: r.id,
+          slug: r.slug,
+          createdAt: r.createdAt,
+          manifestName: r.analysis.manifestName,
+          score: r.analysis.score,
+          verdict: r.analysis.verdict,
+          actionCount: r.analysis.actionCount,
+        });
+      } catch { /* skip corrupt files */ }
+    }
+    reports.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return NextResponse.json({ reports });
+  } catch {
+    return NextResponse.json({ reports: [] });
+  }
+}
 
 export async function POST(request: Request) {
   try {
