@@ -1,102 +1,79 @@
-# ACP Watchtower
+# 🔭 ACP Watchtower
 
-ACP Watchtower is a Vercel-ready Next.js app for **ACP manifest validation, release diffing, hosted readiness reports, and automation-ready monitoring hooks**.
+**Validate ACP manifests, score agent readiness, diff releases, and automate compliance checks.**
 
-## What's live tonight
+[![Live](https://img.shields.io/badge/status-live-brightgreen)](https://acp-watchtower.vercel.app)
 
-- Manifest paste workflow with deterministic readiness analysis
-- Severity-based issue reporting (`critical`, `warning`, `info`)
-- Category scoring across schema completeness, action clarity, discoverability, safety, and maintainability
-- Diff mode for added/removed/changed actions and release-risk summaries
-- Hosted report creation with lightweight file-based persistence
-- Webhook-ready event payload preview
-- Scheduled re-check endpoint ready for Vercel Cron
-- Internal operator dashboard updated with actual build status
+## What it does
 
-## Product wedge
+ACP Watchtower helps teams building with the Agent Communication Protocol:
 
-> Make your ACP app actually agent-ready.
+- **Manifest validation** — Paste or upload ACP manifests, get a deterministic readiness score across 5 categories
+- **Release diffing** — Compare old vs new manifests, flag removed actions, parameter drift, and description changes
+- **Hosted reports** — Generate shareable report URLs with scores, findings, and fix recommendations
+- **SVG badges** — Embed readiness scores in your README
+- **API-first** — All functionality available via REST endpoints for CI/CD integration
+- **Webhook + cron monitoring** — Scheduled re-checks, GitHub webhook triggers, Discord alerts
 
-ACP Watchtower helps ACP builders catch weak metadata, missing schema detail, risky action drift, and poor release hygiene before those mistakes break agent workflows in production.
+## Quick start
 
-## Stack
+### Web UI
+Visit [acp-watchtower.vercel.app](https://acp-watchtower.vercel.app), paste a manifest, click "Run readiness analysis."
 
-- **Framework:** Next.js 16 App Router
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS v4
-- **Persistence (tonight):** File-based JSON snapshots in `data/reports/`
-- **Deployment:** Vercel
-- **Automation:** Route handlers + Vercel Cron config + webhook stub
+### API
+```bash
+# Analyze a manifest
+curl -X POST https://acp-watchtower.vercel.app/api/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"manifest": "{\"name\": \"My Agent\", \"actions\": []}"}'
+
+# Diff two manifests
+curl -X POST https://acp-watchtower.vercel.app/api/diff \
+  -H "Content-Type: application/json" \
+  -d '{"oldManifest": "...", "newManifest": "..."}'
+
+# Create a hosted report
+curl -X POST https://acp-watchtower.vercel.app/api/reports \
+  -H "Content-Type: application/json" \
+  -d '{"manifest": "...", "sourceLabel": "ci-check"}'
+```
+
+## Scoring categories
+
+| Category | What it checks |
+|----------|---------------|
+| Schema completeness | Required fields, action definitions, parameter schemas |
+| Action clarity | Description quality, placeholder detection, specificity |
+| Discoverability | Titles, names, examples for agent tool selection |
+| Safety & guardrails | Dangerous action flagging, safety notes, constraints |
+| Maintainability | Version metadata, stable IDs, naming conventions |
 
 ## Routes
 
-### Product pages
-- `/` — landing page + validator workbench
-- `/dashboard` — internal operator dashboard
-- `/report/[id]` — hosted readiness report page
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/api/analyze` | POST | Analyze a manifest |
+| `/api/diff` | POST | Compare two manifests |
+| `/api/reports` | GET/POST | List or create reports |
+| `/api/reports/[id]` | GET | Get a specific report |
+| `/api/badge/[id]` | GET | SVG readiness badge |
+| `/api/cron/recheck` | GET | Scheduled re-check endpoint |
+| `/api/github/webhook` | POST | GitHub push event handler |
+| `/api/sources` | GET/POST | Manage tracked manifest URLs |
+| `/api/webhooks/ingest` | POST | External webhook intake |
+| `/api/waitlist` | POST | Pro waitlist signup |
 
-### API routes
-- `POST /api/analyze` — analyze a manifest string
-- `POST /api/diff` — compare old vs new manifest strings
-- `POST /api/reports` — create and persist a hosted report
-- `GET /api/reports/:id` — fetch a stored report
-- `POST /api/webhooks/ingest` — webhook receiver stub for downstream delivery
-- `GET /api/cron/recheck` — scheduled monitoring hook for Vercel Cron
+## Tech stack
 
-## Local development
+- Next.js 16 + TypeScript
+- Tailwind CSS
+- Vercel (hosting + cron)
+- File-based storage (reports, sources, waitlist)
 
-```bash
-npm install
-npm run dev
-```
+## License
 
-Open `http://localhost:3000`.
+MIT
 
-## Environment
+---
 
-Copy `.env.example` to `.env.local` if you want to protect the cron endpoint with a bearer token.
-
-```bash
-cp .env.example .env.local
-```
-
-## Demo flow
-
-1. Open `/`
-2. Use the sample manifest buttons or paste your own ACP JSON
-3. Run readiness analysis
-4. Compare releases with diff mode
-5. Create a hosted report and open the generated `/report/[id]` URL
-
-## Automation-first roadmap
-
-### Free
-- Manual validation
-- One-off readiness score
-- Basic manifest diffing
-
-### Pro
-- Saved project history
-- Scheduled re-checks
-- Webhook alerts
-- Score trends and release monitoring
-
-### Design partner
-- Manifest review and rollout audits
-- Team-specific report templates
-- Monitoring setup help and workflow design
-
-## Repository layout
-
-```text
-.
-├── data/reports/            # Lightweight hosted report snapshots
-├── docs/
-├── samples/
-├── src/app/
-├── src/components/
-├── src/lib/
-├── CHANGELOG.md
-├── README.md
-└── vercel.json
-```
+Built by [Pragmasix](https://pragmasix.vercel.app)

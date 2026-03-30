@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import type { AnalysisResult, DiffResult, StoredReport } from "@/lib/watchtower";
 
-type SampleKey = "baseline" | "improved" | "risky";
+type SampleKey = "baseline" | "improved" | "risky" | "ecommerce";
 
 const samples: Record<SampleKey, { label: string; manifest: string }> = {
   baseline: {
@@ -120,6 +120,45 @@ const samples: Record<SampleKey, { label: string; manifest: string }> = {
       "id": "delete-account",
       "title": "Delete account",
       "description": "Delete a user account permanently"
+    }
+  ]
+}`,
+  },
+  ecommerce: {
+    label: "Sample: e-commerce agent",
+    manifest: `{
+  "name": "Shopify Store Agent",
+  "version": "2.1.0",
+  "description": "Agent-operable interface for Shopify store management — products, orders, inventory, and customer lookup.",
+  "metadata": { "owner": "ecommerce-platform", "contact": "integrations@example.com" },
+  "actions": [
+    {
+      "id": "search-products",
+      "title": "Search products",
+      "description": "Search the product catalog by keyword, category, or SKU. Returns matching products with price, stock status, and variants.",
+      "input": { "properties": { "query": { "type": "string" }, "inStock": { "type": "boolean" } }, "required": ["query"] },
+      "examples": [{ "query": "blue sneakers", "inStock": true }]
+    },
+    {
+      "id": "get-order",
+      "title": "Get order details",
+      "description": "Retrieve full order details including line items, shipping status, payment method, and customer info.",
+      "input": { "properties": { "orderId": { "type": "string" } }, "required": ["orderId"] },
+      "examples": [{ "orderId": "ORD-2026-4421" }]
+    },
+    {
+      "id": "update-inventory",
+      "title": "Update inventory count",
+      "description": "Adjust the available inventory quantity for a specific product variant.",
+      "input": { "properties": { "variantId": { "type": "string" }, "adjustment": { "type": "number" } }, "required": ["variantId", "adjustment"] },
+      "safetyNotes": ["Inventory changes are logged and reversible within 24 hours."]
+    },
+    {
+      "id": "lookup-customer",
+      "title": "Look up customer",
+      "description": "Find a customer by email, phone, or customer ID. Returns profile, order history summary, and lifetime value.",
+      "input": { "properties": { "email": { "type": "string" }, "customerId": { "type": "string" } } },
+      "examples": [{ "email": "jane@example.com" }]
     }
   ]
 }`,
