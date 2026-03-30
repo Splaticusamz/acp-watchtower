@@ -149,6 +149,7 @@ export default function WatchtowerWorkbench() {
   const [manifest, setManifest] = useState(samples.baseline.manifest);
   const [oldManifest, setOldManifest] = useState(samples.baseline.manifest);
   const [newManifest, setNewManifest] = useState(samples.improved.manifest);
+  const [manifestUrl, setManifestUrl] = useState("");
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [diff, setDiff] = useState<DiffResult | null>(null);
   const [report, setReport] = useState<StoredReport | null>(null);
@@ -241,6 +242,35 @@ export default function WatchtowerWorkbench() {
                 </button>
               ))}
             </div>
+          </div>
+          <div className="mt-4 flex gap-2">
+            <input
+              type="url"
+              value={manifestUrl}
+              onChange={(e) => setManifestUrl(e.target.value)}
+              placeholder="Or fetch from URL..."
+              className="flex-1 rounded-xl border border-white/10 bg-slate-950/80 px-4 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500"
+            />
+            <button
+              onClick={async () => {
+                if (!manifestUrl.trim()) return;
+                try {
+                  setBusy("fetch");
+                  setError(null);
+                  const res = await fetch(manifestUrl);
+                  const text = await res.text();
+                  setManifest(text);
+                  setManifestUrl("");
+                } catch (err) {
+                  setError(`Failed to fetch: ${err instanceof Error ? err.message : "unknown error"}`);
+                } finally {
+                  setBusy(null);
+                }
+              }}
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10"
+            >
+              {busy === "fetch" ? "Fetching..." : "Fetch"}
+            </button>
           </div>
           <textarea
             value={manifest}

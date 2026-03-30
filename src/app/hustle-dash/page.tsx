@@ -25,8 +25,8 @@ export default function HustleDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
           { label: "Build Status", value: "✅ Clean", color: "emerald" },
-          { label: "API Routes", value: "7 active", color: "cyan" },
-          { label: "Automation", value: "✅ Cron+Webhooks", color: "emerald" },
+          { label: "API Routes", value: "9 active", color: "cyan" },
+          { label: "Pages", value: "8 routes", color: "violet" },
           { label: "Revenue", value: "$0 (pre-launch)", color: "slate" },
         ].map((s) => (
           <div
