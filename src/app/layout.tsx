@@ -44,6 +44,25 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "ACP Watchtower",
+              applicationCategory: "DeveloperApplication",
+              operatingSystem: "Web",
+              description: "Validate ACP manifests, score agent readiness, diff releases, and automate compliance checks.",
+              url: "https://acp-watchtower.vercel.app",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+            }),
+          }}
+        />
         <Nav />
         <div className="flex-1">{children}</div>
         <Footer />

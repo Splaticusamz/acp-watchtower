@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /hustle-dash
+Disallow: /dashboard
+Disallow: /api/
+
+Sitemap: https://acp-watchtower.vercel.app/sitemap.xml
