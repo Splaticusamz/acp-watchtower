@@ -230,6 +230,10 @@ export default function WatchtowerWorkbench() {
   }
 
   async function runDiff() {
+    const oldErr = validateJson(oldManifest);
+    const newErr = validateJson(newManifest);
+    if (oldErr) { setError(`Old manifest: ${oldErr}`); return; }
+    if (newErr) { setError(`New manifest: ${newErr}`); return; }
     try {
       setBusy("diff");
       setError(null);
