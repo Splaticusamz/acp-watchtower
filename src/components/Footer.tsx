@@ -14,6 +14,7 @@ export default function Footer() {
           <Link href="/pricing" className="transition hover:text-slate-300">Pricing</Link>
           <Link href="/changelog" className="transition hover:text-slate-300">Changelog</Link>
           <Link href="/about" className="transition hover:text-slate-300">About</Link>
+          <Link href="/legal" className="transition hover:text-slate-300">Legal</Link>
           <a href="https://github.com/Splaticusamz/acp-watchtower" target="_blank" rel="noopener noreferrer" className="transition hover:text-slate-300">GitHub</a>
         </div>
       </div>
