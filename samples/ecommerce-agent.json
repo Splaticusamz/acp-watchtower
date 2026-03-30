@@ -1,0 +1,85 @@
+{
+  "name": "Shopify Store Agent",
+  "version": "2.1.0",
+  "description": "Agent-operable interface for Shopify store management — products, orders, inventory, and customer lookup.",
+  "metadata": {
+    "owner": "ecommerce-platform",
+    "docsUrl": "https://docs.example.com/shopify-agent",
+    "contact": "integrations@example.com"
+  },
+  "actions": [
+    {
+      "id": "search-products",
+      "title": "Search products",
+      "description": "Search the product catalog by keyword, category, or SKU. Returns matching products with price, stock status, and variants.",
+      "input": {
+        "properties": {
+          "query": { "type": "string", "description": "Search keyword or phrase" },
+          "category": { "type": "string", "description": "Optional category filter" },
+          "inStock": { "type": "boolean", "description": "Only return in-stock products" },
+          "limit": { "type": "number", "description": "Max results (default 20)" }
+        },
+        "required": ["query"]
+      },
+      "examples": [
+        { "query": "blue sneakers", "inStock": true, "limit": 10 }
+      ]
+    },
+    {
+      "id": "get-order",
+      "title": "Get order details",
+      "description": "Retrieve full order details including line items, shipping status, payment method, and customer info.",
+      "input": {
+        "properties": {
+          "orderId": { "type": "string", "description": "Order ID or order number" }
+        },
+        "required": ["orderId"]
+      },
+      "examples": [{ "orderId": "ORD-2026-4421" }]
+    },
+    {
+      "id": "update-inventory",
+      "title": "Update inventory count",
+      "description": "Adjust the available inventory quantity for a specific product variant. Use positive values to add stock, negative to remove.",
+      "input": {
+        "properties": {
+          "variantId": { "type": "string", "description": "Product variant ID" },
+          "adjustment": { "type": "number", "description": "Quantity change (positive = add, negative = subtract)" },
+          "reason": { "type": "string", "description": "Reason for the adjustment" }
+        },
+        "required": ["variantId", "adjustment"]
+      },
+      "examples": [{ "variantId": "var_abc123", "adjustment": -5, "reason": "damaged units" }],
+      "safetyNotes": ["Inventory changes are logged and reversible within 24 hours."]
+    },
+    {
+      "id": "create-discount",
+      "title": "Create discount code",
+      "description": "Generate a new discount code with specified type, value, and constraints.",
+      "input": {
+        "properties": {
+          "code": { "type": "string", "description": "Discount code string" },
+          "type": { "type": "string", "description": "percentage or fixed_amount" },
+          "value": { "type": "number", "description": "Discount value" },
+          "minPurchase": { "type": "number", "description": "Minimum order value to apply" },
+          "expiresAt": { "type": "string", "description": "ISO 8601 expiration date" }
+        },
+        "required": ["code", "type", "value"]
+      },
+      "examples": [{ "code": "SPRING25", "type": "percentage", "value": 25, "minPurchase": 50 }],
+      "safetyNotes": ["Discount codes are rate-limited to 10 per hour per store."]
+    },
+    {
+      "id": "lookup-customer",
+      "title": "Look up customer",
+      "description": "Find a customer by email, phone, or customer ID. Returns profile, order history summary, and lifetime value.",
+      "input": {
+        "properties": {
+          "email": { "type": "string", "description": "Customer email address" },
+          "customerId": { "type": "string", "description": "Customer ID" }
+        }
+      },
+      "examples": [{ "email": "jane@example.com" }]
+    }
+  ]
+}
