@@ -172,6 +172,36 @@ export function analyzeManifest(input: string): AnalysisResult {
     });
   }
 
+  if (!isNonEmptyString(manifest.description)) {
+    addIssue(issues, {
+      severity: "warning",
+      category: "discoverability",
+      title: "Manifest is missing a top-level description",
+      detail: "A clear description helps agents understand what this manifest is for before inspecting individual actions.",
+      recommendation: "Add a concise description explaining the manifest's purpose and capabilities.",
+    });
+  }
+
+  if (!manifest.metadata || Object.keys(manifest.metadata).length === 0) {
+    addIssue(issues, {
+      severity: "info",
+      category: "maintainability",
+      title: "No metadata block",
+      detail: "Metadata (owner, contact, docsUrl) improves operational reliability and team coordination.",
+      recommendation: "Add a metadata block with at least owner and contact fields.",
+    });
+  }
+
+  if (actions.length > 25) {
+    addIssue(issues, {
+      severity: "warning",
+      category: "maintainability",
+      title: `Large action surface (${actions.length} actions)`,
+      detail: "Manifests with many actions increase agent confusion and selection errors. Consider splitting into multiple manifests.",
+      recommendation: "Keep manifests focused — split into domain-specific sub-manifests if possible.",
+    });
+  }
+
   if (!Array.isArray(manifest.actions) || actions.length === 0) {
     addIssue(issues, {
       severity: "critical",
@@ -227,6 +257,16 @@ export function analyzeManifest(input: string): AnalysisResult {
       });
     }
 
+    if (isNonEmptyString(action.description) && action.description!.trim().length > 500) {
+      addIssue(issues, {
+        severity: "info",
+        category: "action-clarity",
+        title: `Action ${label} has an overly verbose description`,
+        detail: "Very long descriptions can confuse agents and increase token costs without improving selection accuracy.",
+        recommendation: "Keep descriptions under 300 characters. Move detailed docs to external references.",
+      });
+    }
+
     if (placeholderTerms.some((pattern) => pattern.test(action.description ?? ""))) {
       addIssue(issues, {
         severity: "warning",
@@ -250,6 +290,16 @@ export function analyzeManifest(input: string): AnalysisResult {
         title: `Action ${label} has no parameter schema`,
         detail: "Parameter metadata helps agents understand inputs, validation, and safe usage.",
         recommendation: "Add input.properties or parameters with field descriptions.",
+      });
+    }
+
+    if (parameterCount > 0 && (!action.input?.required || action.input.required.length === 0)) {
+      addIssue(issues, {
+        severity: "info",
+        category: "schema-completeness",
+        title: `Action ${label} has parameters but no required fields`,
+        detail: "Without required field hints, agents may omit critical inputs or guess wrong defaults.",
+        recommendation: "Mark essential parameters as required in the input schema.",
       });
     }
 
