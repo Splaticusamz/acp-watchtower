@@ -165,7 +165,19 @@ export default function WatchtowerWorkbench() {
     };
   }, [analysis]);
 
+  function validateJson(input: string): string | null {
+    try {
+      const parsed = JSON.parse(input);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return "Manifest must be a JSON object, not an array or primitive.";
+      return null;
+    } catch (e) {
+      return `Invalid JSON: ${e instanceof Error ? e.message : "parse error"}`;
+    }
+  }
+
   async function runAnalysis() {
+    const jsonError = validateJson(manifest);
+    if (jsonError) { setError(jsonError); return; }
     try {
       setBusy("analyze");
       setError(null);
@@ -348,8 +360,16 @@ export default function WatchtowerWorkbench() {
                 </div>
               </div>
             </div>
+          ) : busy === "analyze" ? (
+            <div className="mt-6 grid gap-4 animate-pulse">
+              <div className="grid gap-4 md:grid-cols-3">
+                {[1, 2, 3].map((i) => <div key={i} className="h-24 rounded-2xl bg-slate-800/50" />)}
+              </div>
+              <div className="h-32 rounded-2xl bg-slate-800/50" />
+              <div className="h-48 rounded-2xl bg-slate-800/50" />
+            </div>
           ) : (
-            <p className="mt-6 text-sm leading-7 text-slate-300">Run an analysis to see severity cards, category scores, and issue-level fix guidance.</p>
+            <p className="mt-6 text-sm leading-7 text-slate-300">Paste an ACP manifest above and hit &ldquo;Run readiness analysis&rdquo; to see severity cards, category scores, and issue-level fix guidance.</p>
           )}
         </article>
 

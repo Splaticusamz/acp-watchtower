@@ -19,7 +19,11 @@ export async function POST(request: Request) {
       }
       manifestString = await res.text();
     } else {
-      const body = (await request.json()) as { manifest?: string };
+      const raw = await request.text();
+      if (raw.length > 500_000) {
+        return NextResponse.json({ error: "Manifest too large (max 500KB)" }, { status: 413 });
+      }
+      const body = JSON.parse(raw) as { manifest?: string };
       if (!body.manifest) {
         return NextResponse.json({ error: "manifest is required (POST body or ?url= param)" }, { status: 400 });
       }

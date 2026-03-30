@@ -106,6 +106,26 @@ export default function Home() {
         </section>
 
         <WatchtowerWorkbench />
+
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-8">
+          <p className="text-sm uppercase tracking-[0.28em] text-slate-500">FAQ</p>
+          <h2 className="mt-3 text-2xl font-semibold text-white">Common questions</h2>
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            {[
+              { q: "What is ACP?", a: "The Agent Communication Protocol defines how AI agents discover and invoke actions exposed by applications. Think of it as an API contract designed specifically for agent-to-app communication." },
+              { q: "Do you store my manifest?", a: "Only if you explicitly create a hosted report. Ad-hoc analyses are stateless — nothing is saved unless you click 'Create hosted report'." },
+              { q: "How is the readiness score calculated?", a: "We run deterministic checks across five categories: schema completeness, action clarity, discoverability, safety guardrails, and maintainability. Each issue reduces the category score based on severity." },
+              { q: "Can I automate this?", a: "Yes. POST to /api/analyze with your manifest JSON, or set up /api/cron/recheck for scheduled monitoring. GitHub webhook support is also available for CI/CD integration." },
+              { q: "Is there a CLI?", a: "Not yet — but the API is fully usable from curl or any HTTP client. A CLI is on the roadmap for Pro users." },
+              { q: "What does the badge show?", a: "After creating a hosted report, you get an SVG badge URL showing your readiness score and verdict. Embed it in your README to signal agent-readiness to your users." },
+            ].map(({ q, a }) => (
+              <div key={q}>
+                <h3 className="font-semibold text-white">{q}</h3>
+                <p className="mt-2 text-sm leading-7 text-slate-300">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );
