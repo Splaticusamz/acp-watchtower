@@ -1,0 +1,12 @@
+[
+  {
+    "id": "sample-basic",
+    "label": "Sample ACP Manifest (Basic)",
+    "url": "https://raw.githubusercontent.com/anthropics/anthropic-cookbook/main/misc/acp-manifest.json",
+    "lastCheckedAt": null,
+    "lastScore": null,
+    "lastReportId": null,
+    "enabled": false,
+    "createdAt": "2026-03-30T04:00:00.000Z"
+  }
+]

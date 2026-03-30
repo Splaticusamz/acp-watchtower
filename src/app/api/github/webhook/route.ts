@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
+import { analyzeManifest, saveReport } from "@/lib/watchtower";
 
 function verifySignature(payload: string, signature: string | null, secret: string): boolean {
   if (!signature) return false;
@@ -21,7 +22,7 @@ interface PushCommit {
 interface PushEvent {
   ref?: string;
   commits?: PushCommit[];
-  repository?: { full_name?: string; html_url?: string };
+  repository?: { full_name?: string; html_url?: string; default_branch?: string };
   pusher?: { name?: string };
 }
 
@@ -30,7 +31,6 @@ export async function POST(request: Request) {
   const signature = request.headers.get("x-hub-signature-256");
   const rawBody = await request.text();
 
-  // Verify webhook secret if configured
   const secret = process.env.GITHUB_WEBHOOK_SECRET;
   if (secret) {
     if (!verifySignature(rawBody, signature, secret)) {
@@ -48,11 +48,11 @@ export async function POST(request: Request) {
     ...(c.modified ?? []),
   ]);
 
-  const manifestChanged = allFiles.some(
+  const manifestFiles = allFiles.filter(
     (f) => f === "acp-manifest.json" || f.endsWith("/acp-manifest.json"),
   );
 
-  if (!manifestChanged) {
+  if (manifestFiles.length === 0) {
     return NextResponse.json({
       status: "ok",
       manifestChanged: false,
@@ -60,12 +60,42 @@ export async function POST(request: Request) {
     });
   }
 
-  // TODO: Fetch the updated manifest from the repo and run full analysis
+  const repo = payload.repository?.full_name;
+  const branch = payload.ref?.replace("refs/heads/", "") || payload.repository?.default_branch || "main";
+  const baseUrl = process.env.BASE_URL || "https://acp-watchtower.vercel.app";
+  const reports: Array<{ file: string; reportId: string; score: number; reportUrl: string }> = [];
+
+  for (const file of manifestFiles) {
+    try {
+      const rawUrl = `https://raw.githubusercontent.com/${repo}/${branch}/${file}`;
+      const res = await fetch(rawUrl, { signal: AbortSignal.timeout(10000) });
+      if (!res.ok) continue;
+
+      const manifestString = await res.text();
+      const analysis = analyzeManifest(manifestString);
+      const report = await saveReport({
+        analysis,
+        diff: null,
+        sourceLabel: `${repo}/${file}`,
+      });
+
+      reports.push({
+        file,
+        reportId: report.id,
+        score: analysis.score,
+        reportUrl: `${baseUrl}/report/${report.id}`,
+      });
+    } catch {
+      // Skip files that fail to fetch
+    }
+  }
+
   return NextResponse.json({
     status: "ok",
     manifestChanged: true,
-    repository: payload.repository?.full_name,
-    message: "ACP manifest change detected — analysis queued",
-    // Future: post analysis as PR comment via GitHub API
+    repository: repo,
+    branch,
+    filesAnalyzed: reports.length,
+    reports,
   });
 }
