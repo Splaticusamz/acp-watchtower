@@ -103,6 +103,10 @@ curl -X POST https://acp-watchtower.vercel.app/api/reports \\
         <section className="mt-20">
           <h2 className="text-2xl font-semibold text-white">More resources</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <Link href="/docs/validation-guide" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
+              <h3 className="font-semibold text-white">Validation Guide →</h3>
+              <p className="mt-2 text-sm text-slate-300">Learn what makes a good ACP manifest: scoring categories, common mistakes, and best practices.</p>
+            </Link>
             <Link href="/docs/ci" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
               <h3 className="font-semibold text-white">CI/CD Integration Guide →</h3>
               <p className="mt-2 text-sm text-slate-300">GitHub Actions, GitLab CI, and generic curl examples for automated manifest validation.</p>
