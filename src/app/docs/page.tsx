@@ -111,6 +111,10 @@ curl -X POST https://acp-watchtower.vercel.app/api/reports \\
               <h3 className="font-semibold text-white">CI/CD Integration Guide →</h3>
               <p className="mt-2 text-sm text-slate-300">GitHub Actions, GitLab CI, and generic curl examples for automated manifest validation.</p>
             </Link>
+            <Link href="/docs/multi-agent-acp" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
+              <h3 className="font-semibold text-white">ACP in Multi-Agent Systems →</h3>
+              <p className="mt-2 text-sm text-slate-300">How agents discover each other, establish trust, and communicate reliably. Patterns, trust levels, and production manifest examples.</p>
+            </Link>
             <Link href="/examples" className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30">
               <h3 className="font-semibold text-white">Example Manifests →</h3>
               <p className="mt-2 text-sm text-slate-300">Real-world patterns for support, e-commerce, CRM, DevOps, and more.</p>
